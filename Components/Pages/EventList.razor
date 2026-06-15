@@ -1,0 +1,110 @@
+@rendermode InteractiveServer
+@page "/events"
+
+@using BlazorProject.Models
+
+<h1>Event List</h1>
+<SessionStatus />
+<EditForm Model="eventData" FormName="EventForm" OnValidSubmit="AddEvent">
+
+    <DataAnnotationsValidator />
+
+    <ValidationSummary />
+
+    <div>
+        <label>Event Name</label>
+        <InputText
+            class="form-control"
+            @bind-Value="eventData.EventName" />
+
+        <ValidationMessage
+            For="() => eventData.EventName" />
+    </div>
+
+    <br />
+
+    <div>
+        <label>Date</label>
+        <InputText
+            class="form-control"
+            @bind-Value="eventData.EventDate" />
+
+        <ValidationMessage
+            For="() => eventData.EventDate" />
+    </div>
+
+    <br />
+
+    <div>
+        <label>Location</label>
+        <InputText
+            class="form-control"
+            @bind-Value="eventData.Location" />
+
+        <ValidationMessage
+            For="() => eventData.Location" />
+    </div>
+
+    <br />
+
+    <button class="btn btn-primary" type="submit">
+       Add Event
+    </button>
+</EditForm>
+
+<h3>Upcoming Events</h3>
+
+@foreach (var ev in events)
+{
+    <EventCard
+        @key="ev"
+        EventName="@ev.EventName"
+        EventDate="@ev.EventDate"
+        Location="@ev.Location" />
+}
+
+<hr />
+
+<EventCard
+    EventName="@eventData.EventName"
+    EventDate="@eventData.EventDate"
+    Location="@eventData.Location" />
+
+@code {
+
+    private Event eventData = new();
+    private List<Event> events = new()
+    {
+        new Event
+        {
+            EventName = "Tech Conference",
+            EventDate = "2026-07-01",
+            Location = "Chisinau"
+        },
+
+        new Event
+        {
+            EventName = "Business Summit",
+            EventDate = "2026-08-10",
+            Location = "Bucharest"
+        },
+
+        new Event
+        {
+            EventName = "Startup Expo",
+            EventDate = "2026-09-15",
+            Location = "Cluj"
+        }
+    };
+    private void AddEvent()
+    {
+        events.Add(new Event
+        {
+            EventName = eventData.EventName,
+            EventDate = eventData.EventDate,
+            Location = eventData.Location
+        });
+
+        eventData = new Event();
+    }
+}

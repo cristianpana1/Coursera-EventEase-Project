@@ -1,0 +1,63 @@
+@rendermode InteractiveServer
+@page "/register"
+
+@using BlazorProject.Models
+@using BlazorProject.Services
+@inject NavigationManager Navigation
+@inject UserSessionService SessionService
+@inject AttendanceService AttendanceService
+
+<h1>Event Registration</h1>
+
+<EditForm Model="registration"
+          OnValidSubmit="HandleSubmit"
+          FormName="RegisterForm">
+
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div>
+        <label>Name</label>
+        <InputText class="form-control"
+                   @bind-Value="registration.Name"/>
+    </div>
+
+    <br />
+
+    <div>
+        <label>Email</label>
+        <InputText class="form-control"
+                   @bind-Value="registration.Email"/>
+    </div>
+
+    <br />
+
+    <button class="btn btn-primary" type="submit">
+        Register
+    </button>
+</EditForm>
+
+@if (SessionService.IsRegistered)
+{
+    <hr />
+
+    <h4>Registration Successful</h4>
+
+    <p>Name: @SessionService.UserName</p>
+}
+
+@code {
+
+    private UserRegistration registration = new();
+
+    private void HandleSubmit()
+    {
+        SessionService.UserName = registration.Name;
+        SessionService.IsRegistered = true;
+    
+        AttendanceService.RegisterAttendance(registration.Name);
+    
+        Navigation.NavigateTo("/events");
+    }
+    
+}

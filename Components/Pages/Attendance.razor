@@ -1,0 +1,18 @@
+@page "/attendance"
+
+@using BlazorProject.Services
+
+@inject AttendanceService AttendanceService
+
+<h1>Attendance Tracker</h1>
+
+<h4>Total Registered:
+    @AttendanceService.GetAttendees().Count
+</h4>
+
+<ul>
+    @foreach (var attendee in AttendanceService.GetAttendees())
+    {
+        <li>@attendee</li>
+    }
+</ul>

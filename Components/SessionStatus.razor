@@ -1,0 +1,16 @@
+@using BlazorProject.Services
+
+@inject UserSessionService SessionService
+
+@if (SessionService.IsRegistered)
+{
+    <div class="alert alert-success">
+        Logged in as: @SessionService.UserName
+    </div>
+}
+else
+{
+    <div class="alert alert-warning">
+        No active registration
+    </div>
+}
